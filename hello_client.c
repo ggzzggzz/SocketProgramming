@@ -14,10 +14,11 @@ int main(int argc, char *argv[])
 	struct sockaddr_in serv_addr;
 	char message[30];
 	int str_len;
+	int idx=0, read_len=0;
 	
 	if(argc!=3)
 	{
-		printf("Usage : %s <port>\n", argv[0]);
+		printf("Usage : %s <IP> <port>\n", argv[0]);
 		exit(1);
 	}
 	
@@ -30,11 +31,17 @@ int main(int argc, char *argv[])
 	serv_addr.sin_port = htons(atoi(argv[2]));
 
 	if(connect(sock, (struct sockaddr*)&serv_addr, sizeof(serv_addr))==-1)
-		error_handling("socket() error");
-	str_len=read(sock,message,sizeof(message)-1);
-	if(str_len==-1)
-		error_handling("read() error");
+		error_handling("connect() error");
+	while(read_len=read(sock, &message[idx++], 1))
+	{
+		if(read_len==-1)
+			error_handling("read() error");
+
+		str_len+=read_len;
+	}
+	
 	printf("Message from server : %s \n", message);
+	printf("Fuction read call count: %d \n", str_len);
 	close(sock);
 	return 0;
 }
