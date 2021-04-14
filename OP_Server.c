@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
         int result, opnd_cnt, i;
         int recv_cnt, recv_len;
         struct sockaddr_in serv_adr, clnt_adr;
-        socklen_t clnt_adr_size;
+        socklen_t clnt_adr_sz;
 
         if(argc!=2)
         {
@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
                 recv_len=0;
                 while((opnd_cnt*OPSZ+1)>recv_len)
                 {
-                        recv_cnt=read(clnt_sock, &opinfo[recv_len], BUFSIZE-1);
+                        recv_cnt=read(clnt_sock, &opinfo[recv_len], BUF_SIZE-1);
                         recv_len+=recv_cnt;
                 }
                 result=calculate(opnd_cnt, (int*)opinfo, opinfo[recv_len-1]);
